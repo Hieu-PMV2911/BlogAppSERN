@@ -16,23 +16,7 @@ module.exports = (sequelize, DataTypes) => {
 			type:DataTypes.DATE,
 			allowNull: false
 		},
-		picturePath: {
-			type:DataTypes.STRING,
-			allowNull: false
-		},
-		location: {
-			type:DataTypes.STRING,
-			allowNull: false
-		},
-		occupation: {
-			type:DataTypes.STRING,
-			allowNull: false
-		},
-		viewedProfile: {
-			type:DataTypes.STRING,
-			allowNull: false
-		},
-		impressions: {
+		cate: {
 			type:DataTypes.STRING,
 			allowNull: false
 		},

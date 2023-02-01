@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Edit from '../assets/imgs/edit.png'
 import Delete from '../assets/imgs/delete.png'
 import Menu from '../components/Menu'
@@ -10,6 +10,7 @@ import { AuthContext } from '../context/AuthContext'
 export const Single = () => {
   const {currentUser}:any = useContext(AuthContext);
   const location = useLocation();
+  const navigate = useNavigate();
   const [posts, setPosts]:any = useState([]);
   const postId = location.pathname.split("/")[2];
   useEffect(() =>{
@@ -24,23 +25,30 @@ export const Single = () => {
     }
     fetchPosts();
   },[postId])
-  console.log(location)
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:8080/api/posts/delete-post/${postId}`)
+      navigate("/");
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="single">
       <div className="content">
-        <img src={posts?.img} alt="" />
+        <img src={`/${posts?.img}`} alt="" />
         <div className="user">
           <img src="https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
           <div className="info">
             <span>{posts?.username}</span>
-            <p>Posted {moment(posts?.date).fromNow()}</p>
+            <p>Posted {moment(posts?.createAt).fromNow()}</p>
           </div>
           {currentUser.username === posts.username && (
             <div className="edit">
-              <Link to={`/write?edit=2`}>
+              <Link to={`/write?edit=2`} state={posts}>
                 <img src={Edit} alt="" />
               </Link>
-              <img src={Delete} alt="" />
+              <img onClick={handleDelete} src={Delete} alt="" />
             </div>
           )}
         </div>
